@@ -315,7 +315,6 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
 
         meas.reset(new IntegratedImuMeasurement<Scalar>(prev_frame->t_ns, last_state.getState().bias_gyro,
                                                         last_state.getState().bias_accel));
-
         BASALT_ASSERT_MSG(prev_frame->t_ns != curr_frame->t_ns,
                           "duplicate frame timestamps?! zero time delta leads "
                           "to invalid IMU integration.");

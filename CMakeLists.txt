@@ -417,6 +417,7 @@ target_sources(basalt_internal
     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/calibration/cam_imu_calib.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/calibration/vignette.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/device/rs_t265.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/device/oak.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io_euroc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io_kitti.h
@@ -431,7 +432,7 @@ target_sources(basalt_internal
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/dataset_io.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/vi_estimator/nfr_mapper.cpp
 )
-target_link_libraries(basalt_internal PRIVATE rosbag apriltag opengv)
+target_link_libraries(basalt_internal PRIVATE rosbag apriltag opengv depthai::core)
 
 
 endif()
@@ -493,6 +494,14 @@ if(realsense2_FOUND)
   target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 pangolin basalt::cli11)
 endif()
 
+find_package(depthai CONFIG QUIET)
+if(depthai_FOUND)
+  add_executable(basalt_oak_record src/oak_record.cpp src/device/oak.cpp)
+  target_link_libraries(basalt_oak_record basalt_internal depthai::core pangolin basalt::cli11)
+
+  add_executable(basalt_oak_vio src/oak_vio.cpp src/device/oak.cpp)
+  target_link_libraries(basalt_oak_vio basalt_internal depthai::core pangolin basalt::cli11)
+endif()
 endif(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
 
 # Update basalt.map library name (symbol present in the final .so)
@@ -520,7 +529,7 @@ if(BASALT_BUILD_SHARED_LIBRARY_ONLY)
 
 else()
 
-install(TARGETS basalt basalt_calibrate basalt_calibrate_imu basalt_vio_sim basalt_mapper_sim basalt_mapper basalt_opt_flow basalt_vio basalt_kitti_eval basalt_time_alignment
+install(TARGETS basalt_oak_record basalt basalt_oak_vio basalt_calibrate basalt_calibrate_imu basalt_vio_sim basalt_mapper_sim basalt_mapper basalt_opt_flow basalt_vio basalt_kitti_eval basalt_time_alignment
   RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
   LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
   ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
@@ -538,6 +547,13 @@ if(realsense2_FOUND)
       LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
       ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 endif()
+if(depthaiFound)
+    install(TARGETS basalt_oak_record basalt_oak_vio
+      RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+      LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+endif()
+
 
 file(GLOB SCRIPTS_TO_INSTALL "${CMAKE_CURRENT_SOURCE_DIR}/scripts/basalt_*.py")
 install(PROGRAMS ${SCRIPTS_TO_INSTALL} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
