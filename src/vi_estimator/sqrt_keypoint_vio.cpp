@@ -580,7 +580,11 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
   if (!success) return false;
 
   size_t num_cams = opt_flow_meas->keypoints.size();
-  bool features_cap = (opt_flow_meas->input_images->stats.enabled_caps & VIT_TRACKER_POSE_CAPABILITY_FEATURES) != 0;
+
+  bool features_cap = false;
+  #ifdef VIT_INTERFACE_IMPLEMENTATION
+  features_cap= (opt_flow_meas->input_images->stats.enabled_caps & VIT_TRACKER_POSE_CAPABILITY_FEATURES) != 0;
+  #endif
   bool avg_depth_needed =
       opt_flow_depth_guess_queue && config.optical_flow_matching_guess_type == MatchingGuessType::REPROJ_AVG_DEPTH;
 
@@ -613,7 +617,7 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
 
       if (opt_flow_depth_guess_queue) opt_flow_depth_guess_queue->push(avg_depth);
     }
-
+    #ifdef VIT_INTERFACE_IMPLEMENTATION
     if (features_cap) {
       for (size_t i = 0; i < num_cams; i++) {
         for (const Eigen::Vector4d& v : projections->at(i)) {
@@ -626,6 +630,7 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
         }
       }
     }
+    #endif
     if (out_state_queue) out_state_queue->push(data);
     if (opt_flow_state_queue) opt_flow_state_queue->push(data);
   }

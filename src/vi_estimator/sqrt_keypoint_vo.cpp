@@ -42,8 +42,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <basalt/utils/cast_utils.hpp>
 #include <basalt/utils/format.hpp>
 #include <basalt/utils/time_utils.hpp>
+#ifdef VIT_INTERFACE_IMPLEMENTATION
 #include <vit_implementation_helper.hpp>
-
+#endif
 #include <basalt/linearization/linearization_base.hpp>
 
 #include <tbb/blocked_range.h>
@@ -400,7 +401,10 @@ bool SqrtKeypointVoEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& opt
   optimize_and_marg(opt_flow_meas->input_images, num_points_connected, lost_landmaks);
 
   size_t num_cams = opt_flow_meas->keypoints.size();
-  bool features_cap = (opt_flow_meas->input_images->stats.enabled_caps & VIT_TRACKER_POSE_CAPABILITY_FEATURES) != 0;
+  bool features_cap = false;
+  #ifdef VIT_INTERFACE_IMPLEMENTATION
+  features_cap = (opt_flow_meas->input_images->stats.enabled_caps & VIT_TRACKER_POSE_CAPABILITY_FEATURES) != 0;
+  #endif
   bool avg_depth_needed =
       opt_flow_depth_guess_queue && config.optical_flow_matching_guess_type == MatchingGuessType::REPROJ_AVG_DEPTH;
 
@@ -410,7 +414,6 @@ bool SqrtKeypointVoEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& opt
     projections = std::make_shared<Projections>(num_cams);
     computeProjections(*projections, last_state_t_ns);
   }
-
   if (out_state_queue) {
     const PoseStateWithLin<Scalar>& p = frame_poses.at(last_state_t_ns);
 
@@ -435,7 +438,7 @@ bool SqrtKeypointVoEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& opt
 
       opt_flow_depth_guess_queue->push(avg_depth);
     }
-
+    #ifdef VIT_INTERFACE_IMPLEMENTATION
     if (features_cap) {
       for (size_t i = 0; i < num_cams; i++) {
         for (const Eigen::Vector4d& v : projections->at(i)) {
@@ -448,6 +451,7 @@ bool SqrtKeypointVoEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& opt
         }
       }
     }
+    #endif
     out_state_queue->push(data);
   }
 
