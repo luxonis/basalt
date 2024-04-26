@@ -311,10 +311,10 @@ if(BASALT_SDK_ONLY)
   set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
   include_directories(include)
-  hunter_add_package(basalt-headers)
   hunter_add_package(cereal)
   hunter_add_package(Sophus)
   hunter_add_package(magic_enum)
+  hunter_add_package(basalt-headers)
 
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
