@@ -24,7 +24,7 @@ hunter_config(
 hunter_config(
     basalt-headers
     URL "https://github.com/Serafadam/basalt-headers-mirror/archive/refs/heads/hunter.zip"
-    SHA1 "8ff08711590992d1c03fc5efcb6af54962e27825"
+    SHA1 "0998433c242cf1f615441032aa954c92e42daa5f"
 )
 
 hunter_config(
