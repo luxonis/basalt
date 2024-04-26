@@ -306,7 +306,7 @@ find_package(fmt REQUIRED)
 message(STATUS "Found {fmt} ${fmt_VERSION} in: ${fmt_DIR}")
 
 if(BASALT_SDK_ONLY)
-
+  hunter_add_package(nlohmann_json)
   add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
   set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
@@ -315,7 +315,7 @@ if(BASALT_SDK_ONLY)
   hunter_add_package(cereal)
   hunter_add_package(Sophus)
   hunter_add_package(magic_enum)
-  
+
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
   find_package(Sophus CONFIG REQUIRED)
