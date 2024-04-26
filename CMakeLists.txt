@@ -320,7 +320,10 @@ if(BASALT_SDK_ONLY)
   find_package(cereal CONFIG REQUIRED)
   find_package(Sophus CONFIG REQUIRED)
   find_package(magic_enum CONFIG REQUIRED)
-
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/include/basalt/utils/build_config.h
+  )
   add_library(basalt_sdk
     src/io/marg_data_io.cpp
     src/linearization/landmark_block.cpp
