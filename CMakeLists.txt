@@ -357,9 +357,27 @@ if(BASALT_SDK_ONLY)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
+  # install basalt_sdkConfig.cmake
+  include(CMakePackageConfigHelpers)
+  configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/basalt_sdkConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/basalt_sdkConfig.cmake
+    INSTALL_DESTINATION lib/cmake/basalt_sdk
+  )
+
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/basalt_sdkConfig.cmake"
+    DESTINATION lib/cmake/basalt_sdk
+  )
+
   install(FILES "${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h"
   DESTINATION include/basalt/utils
   )
+
+  # install headers
+  install(DIRECTORY include/basalt
+    DESTINATION include
+  )
+
   install(TARGETS basalt_sdk
     EXPORT basalt_sdkTargets
     LIBRARY DESTINATION lib
@@ -369,9 +387,10 @@ if(BASALT_SDK_ONLY)
   )
   install(EXPORT basalt_sdkTargets
     FILE basalt_sdkTargets.cmake
-    NAMESPACE basalt::
-    DESTINATION lib/cmake/basalt
+    NAMESPACE basalt_sdk::
+    DESTINATION lib/cmake/basalt_sdk
   )
+
 
 else()
 
