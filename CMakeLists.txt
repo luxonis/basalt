@@ -314,11 +314,13 @@ if(BASALT_SDK_ONLY)
   hunter_add_package(Sophus)
   hunter_add_package(magic_enum)
   hunter_add_package(basalt-headers)
+  hunter_add_package(opengv)
   
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
   find_package(Sophus CONFIG REQUIRED)
   find_package(magic_enum CONFIG REQUIRED)
+  find_package(opengv CONFIG REQUIRED)
   configure_file(
     ${PROJECT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
     ${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h
@@ -351,7 +353,7 @@ if(BASALT_SDK_ONLY)
     "$<INSTALL_INTERFACE:include>"
   )
   target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
-  target_link_libraries(basalt_sdk PRIVATE basalt::opencv TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
+  target_link_libraries(basalt_sdk PRIVATE basalt::opencv TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt opengv)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 

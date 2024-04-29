@@ -34,3 +34,10 @@ hunter_config(
     URL "https://github.com/Neargye/magic_enum/archive/3d1f6a5a2a3fbcba077e00ad0ccc2dd9fefc2ca7.zip"
     SHA1 "c9a27f6ff8311f0c6b2adb959d0598f079fcc9f3"
 )
+
+hunter_config(
+    opengv
+    VERSION 1.0.0
+    URL "https://github.com/laurentkneip/opengv/archive/refs/heads/master.zip"
+    SHA1 "d046e9b94153a9d97638aaef719e0250ad660113"
+)
