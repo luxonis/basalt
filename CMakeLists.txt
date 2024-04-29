@@ -350,12 +350,14 @@ if(BASALT_SDK_ONLY)
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>"
   )
-  include_directories("${PROJECT_BINARY_DIR}")
+  target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
   target_link_libraries(basalt_sdk PRIVATE basalt::opencv TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/include/basalt/utils/build_config.h DESTINATION include/basalt/utils)
+  install(FILES "${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h"
+  DESTINATION include/basalt/utils
+  )
   install(TARGETS basalt_sdk
     EXPORT basalt_sdkTargets
     LIBRARY DESTINATION lib
