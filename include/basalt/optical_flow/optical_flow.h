@@ -100,7 +100,7 @@ struct OpticalFlowInput {
   vit::TimeStats stats;  //!< Keeps track of internal metrics for this t_ns
   void addTime(const char* name, int64_t custom_ts = INT64_MIN) { stats.addTime(name, custom_ts); }
 #else
-  void addTime(const char* /*name*/, int64_t /*custom_ts = INT64_MIN*/) { return; }
+  void addTime(const char* name, int64_t custom_ts = INT64_MIN) { return; }
 #endif
   // vit::TimeStats stats;  //!< Keeps track of internal metrics for this t_ns
 };
