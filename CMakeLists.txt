@@ -310,20 +310,20 @@ if(BASALT_SDK_ONLY)
   add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
   set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
-  include_directories(include)
   hunter_add_package(cereal)
   hunter_add_package(Sophus)
   hunter_add_package(magic_enum)
   hunter_add_package(basalt-headers)
-
+  
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
   find_package(Sophus CONFIG REQUIRED)
   find_package(magic_enum CONFIG REQUIRED)
   configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/include/basalt/utils/build_config.h
-  )
+    ${PROJECT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
+    ${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h
+    )
+  include_directories(include)
   add_library(basalt_sdk
     src/io/marg_data_io.cpp
     src/linearization/landmark_block.cpp
@@ -346,15 +346,16 @@ if(BASALT_SDK_ONLY)
     src/vi_estimator/vio_estimator.cpp
   )
 
-  target_include_directories(basalt_sdk PUBLIC
+  target_include_directories(basalt_sdk PRIVATE
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>"
   )
+  include_directories("${PROJECT_BINARY_DIR}")
   target_link_libraries(basalt_sdk PRIVATE basalt::opencv TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
-
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/include/basalt/utils/build_config.h DESTINATION include/basalt/utils)
   install(TARGETS basalt_sdk
     EXPORT basalt_sdkTargets
     LIBRARY DESTINATION lib

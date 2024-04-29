@@ -56,7 +56,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <basalt/utils/time_utils.hpp>
 #include "sophus/se3.hpp"
 #ifdef VIT_INTERFACE_IMPLEMENTATION
-  #include <vit_implementation_helper.hpp>
+#include <vit_implementation_helper.hpp>
 #endif
 #include <tbb/concurrent_queue.h>
 
@@ -96,12 +96,12 @@ struct OpticalFlowInput {
   bool state_reset = false;       //!< Whether to schedule a state reset in the backend
   std::vector<Masks> masks{};     //!< Regions of the image to ignore
   UIMAT show_uimat = UIMAT::ALL;  //!< Which matrix to compute for the UI
-  #ifdef VIT_INTERFACE_IMPLEMENTATION
-    vit::TimeStats stats;  //!< Keeps track of internal metrics for this t_ns
+#ifdef VIT_INTERFACE_IMPLEMENTATION
+  vit::TimeStats stats;  //!< Keeps track of internal metrics for this t_ns
   void addTime(const char* name, int64_t custom_ts = INT64_MIN) { stats.addTime(name, custom_ts); }
-  #else
-    void addTime(const char* name, int64_t custom_ts = INT64_MIN) {return;}
-  #endif
+#else
+  void addTime(const char* /*name*/, int64_t /*custom_ts = INT64_MIN*/) { return; }
+#endif
   // vit::TimeStats stats;  //!< Keeps track of internal metrics for this t_ns
 };
 
