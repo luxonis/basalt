@@ -302,8 +302,6 @@ set_property(TARGET basalt::opencv PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Open
 set_property(TARGET basalt::opencv PROPERTY INTERFACE_LINK_LIBRARIES ${OpenCV_LIBS})
 
 
-find_package(fmt REQUIRED)
-message(STATUS "Found {fmt} ${fmt_VERSION} in: ${fmt_DIR}")
 
 if(BASALT_SDK_ONLY)
   hunter_add_package(nlohmann_json)
@@ -315,12 +313,14 @@ if(BASALT_SDK_ONLY)
   hunter_add_package(magic_enum)
   hunter_add_package(basalt-headers)
   hunter_add_package(opengv)
+  hunter_add_package(fmt)
   
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
   find_package(Sophus CONFIG REQUIRED)
   find_package(magic_enum CONFIG REQUIRED)
   find_package(opengv CONFIG REQUIRED)
+  find_package(fmt REQUIRED)
   configure_file(
     ${PROJECT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
     ${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h
@@ -393,6 +393,8 @@ if(BASALT_SDK_ONLY)
 
 
 else()
+find_package(fmt REQUIRED)
+message(STATUS "Found {fmt} ${fmt_VERSION} in: ${fmt_DIR}")
 
 add_subdirectory(thirdparty)
 
