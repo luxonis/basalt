@@ -277,12 +277,6 @@ endif()
 set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS} ${BASALT_MARCH_FLAGS} ${BASALT_PASSED_CXX_FLAGS}")
 
 
-set(EIGEN_INCLUDE_DIR_HINTS ${EIGEN_ROOT})
-find_package(Eigen3 3.4.0 EXACT REQUIRED NO_MODULE)
-message(STATUS "Found Eigen headers in: ${EIGEN3_INCLUDE_DIR}")
-if(NOT EIGEN3_INCLUDE_DIR MATCHES "^${EIGEN_ROOT}")
-  message(WARNING "Found Eigen headers are outside of specified EIGEN_ROOT '${EIGEN_ROOT}'")
-endif()
 
 find_package(TBB REQUIRED)
 message(STATUS "Found TBB ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} (interface version ${TBB_INTERFACE_VERSION}) headers in: ${TBB_INCLUDE_DIRS}")
@@ -304,16 +298,17 @@ set_property(TARGET basalt::opencv PROPERTY INTERFACE_LINK_LIBRARIES ${OpenCV_LI
 
 
 if(BASALT_SDK_ONLY)
-  hunter_add_package(nlohmann_json)
-  add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
+hunter_add_package(nlohmann_json)
+add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
+set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
-  hunter_add_package(cereal)
-  hunter_add_package(Sophus)
-  hunter_add_package(magic_enum)
-  hunter_add_package(basalt-headers)
-  hunter_add_package(opengv)
-  hunter_add_package(fmt)
+hunter_add_package(cereal)
+hunter_add_package(Sophus)
+hunter_add_package(magic_enum)
+hunter_add_package(basalt-headers)
+hunter_add_package(opengv)
+hunter_add_package(fmt)
+hunter_add_package(Eigen)
   
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
@@ -321,6 +316,7 @@ if(BASALT_SDK_ONLY)
   find_package(magic_enum CONFIG REQUIRED)
   find_package(opengv CONFIG REQUIRED)
   find_package(fmt REQUIRED)
+  find_package(Eigen3 CONFIG REQUIRED)
   configure_file(
     ${PROJECT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
     ${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h
@@ -393,6 +389,15 @@ if(BASALT_SDK_ONLY)
 
 
 else()
+
+set(EIGEN_INCLUDE_DIR_HINTS ${EIGEN_ROOT})
+find_package(Eigen3 3.4.0 EXACT REQUIRED NO_MODULE)
+message(STATUS "Found Eigen headers in: ${EIGEN3_INCLUDE_DIR}")
+if(NOT EIGEN3_INCLUDE_DIR MATCHES "^${EIGEN_ROOT}")
+  message(WARNING "Found Eigen headers are outside of specified EIGEN_ROOT '${EIGEN_ROOT}'")
+endif()
+
+
 find_package(fmt REQUIRED)
 message(STATUS "Found {fmt} ${fmt_VERSION} in: ${fmt_DIR}")
 

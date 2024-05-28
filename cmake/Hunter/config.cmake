@@ -2,9 +2,6 @@
 hunter_config(
     Eigen
     VERSION 3.4.0
-    CMAKE_ARGS
-        CMAKE_BUILD_TYPE=RelWithDebInfo
-        EIGEN_INITIALIZE_MATRICES_BY_NAN=ON
 )
 
 hunter_config(
@@ -24,8 +21,8 @@ hunter_config(
 hunter_config(
     basalt-headers
     VERSION 0.1.0
-    URL "https://github.com/Serafadam/basalt-headers-mirror/archive/refs/heads/hunter.zip"
-    SHA1 "765b95540814cdcad5a01c9a791d57ad8c7cf4ae"
+    URL "https://github.com/luxonis/basalt-headers/archive/refs/heads/hunter.zip"
+    SHA1 "52c6a5d1beb6783e48460f62605f8d1d912bdf2b"
 )
 
 hunter_config(
