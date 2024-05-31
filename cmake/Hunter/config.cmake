@@ -10,7 +10,8 @@ hunter_config(
     URL "https://github.com/strasdat/Sophus/archive/936265f5815dee546a3583ceba58c234c2ecb271.zip"
     SHA1 "7f54e06fb1680910c465e12ea85fc414ce7a9f9e"
     CMAKE_ARGS
-        CMAKE_CXX_FLAGS=-Wno-array-bounds
+        BUILD_TESTS=OFF
+        BUILD_EXAMPLES=OFF
 )
 
 hunter_config(
@@ -24,7 +25,7 @@ hunter_config(
     basalt-headers
     VERSION 0.1.0
     URL "https://github.com/luxonis/basalt-headers/archive/refs/heads/hunter.zip"
-    SHA1 "142fd91603711f9f05c7a6a0b953ae5c39fd8b80"
+    SHA1 "2e8e6064544ed7eaa7c9ec459730a7f272aa8d9d"
 )
 
 hunter_config(
