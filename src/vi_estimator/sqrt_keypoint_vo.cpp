@@ -89,7 +89,6 @@ SqrtKeypointVoEstimator<Scalar_>::SqrtKeypointVoEstimator(const basalt::Calibrat
     marg_data.H.diagonal().setConstant(Scalar(config.vio_init_pose_weight));
   }
 
-  std::cout << "marg_H (sqrt:" << marg_data.is_sqrt << ")\n" << marg_data.H << std::endl;
 
   max_states = config.vio_max_states;
   max_kfs = config.vio_max_kfs;
@@ -161,8 +160,6 @@ void SqrtKeypointVoEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg, con
 
         nullspace_marg_data.order = marg_data.order;
 
-        std::cout << "Setting up filter: t_ns " << last_state_t_ns << std::endl;
-        std::cout << "T_w_i\n" << T_w_i_init.matrix() << std::endl;
 
         if (config.vio_debug || config.vio_extended_logging) {
           logMargNullspace();

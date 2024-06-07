@@ -105,7 +105,6 @@ SqrtKeypointVioEstimator<Scalar_>::SqrtKeypointVioEstimator(const Eigen::Vector3
     marg_data.H.diagonal().template segment<3>(12).array() = Scalar(config.vio_init_bg_weight);
   }
 
-  std::cout << "marg_H (sqrt:" << marg_data.is_sqrt << ")\n" << marg_data.H << std::endl;
 
   gyro_bias_sqrt_weight = calib.gyro_bias_std.array().inverse();
   accel_bias_sqrt_weight = calib.accel_bias_std.array().inverse();
@@ -195,7 +194,6 @@ bool SqrtKeypointVioEstimator<Scalar>::resetState(typename IntegratedImuMeasurem
     marg_data.H.diagonal().template segment<3>(12).array() = Scalar(config.vio_init_bg_weight);
   }
 
-  std::cout << "marg_H (sqrt:" << marg_data.is_sqrt << ")\n" << marg_data.H << std::endl;
 
   opt_started = false;
   schedule_reset = false;
@@ -297,9 +295,6 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
         marg_data.order.total_size = POSE_VEL_BIAS_SIZE;
         marg_data.order.items = 1;
 
-        std::cout << "Setting up filter: t_ns " << last_state_t_ns << std::endl;
-        std::cout << "T_w_i\n" << T_w_i_init.matrix() << std::endl;
-        std::cout << "vel_w_i " << vel_w_i_init.transpose() << std::endl;
 
         if (config.vio_debug || config.vio_extended_logging) {
           logMargNullspace();
