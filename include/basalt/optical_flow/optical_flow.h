@@ -132,14 +132,14 @@ class OpticalFlowBase {
     depth_guess = config.optical_flow_matching_default_depth;
   }
   virtual ~OpticalFlowBase() {  // Make the destructor virtual
-    if (processing_thread && processing_thread->joinable()) {
-      processing_thread->join();
+    if (processing_thread && processing_thread.joinable()) {
+      processing_thread.join();
     }
   }
 
   virtual void processingLoop() = 0;
 
-  void start() { processing_thread = std::make_shared<std::thread>(&OpticalFlowBase::processingLoop, this); }
+  void start() { processing_thread = std::thread(&OpticalFlowBase::processingLoop, this); }
 
   virtual inline void drain_input_queues() {
     while (!input_img_queue.empty()) {
@@ -183,7 +183,7 @@ class OpticalFlowBase {
   VioConfig config;
 
   OpticalFlowResult::Ptr transforms;
-  std::shared_ptr<std::thread> processing_thread;
+  std::thread processing_thread;
   std::shared_ptr<std::vector<ManagedImagePyr<uint16_t>>> old_pyramid;
   std::shared_ptr<std::vector<ManagedImagePyr<uint16_t>>> pyramid;
 };
