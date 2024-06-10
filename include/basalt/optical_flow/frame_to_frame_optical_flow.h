@@ -120,38 +120,37 @@ class FrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
   }
 
   void processingLoop() override {
-    std::cout << "test" << std::endl;
-    // using std::make_shared;
-    // OpticalFlowInput::Ptr img;
+    using std::make_shared;
+    OpticalFlowInput::Ptr img;
 
-    // while (true) {
-    //   input_img_queue.pop(img);
+    while (true) {
+      input_img_queue.pop(img);
 
-    //   if (img == nullptr) {
-    //     if (output_queue) output_queue->push(nullptr);
-    //     break;
-    //   }
-    //   img->addTime("frames_received");
+      if (img == nullptr) {
+        if (output_queue) output_queue->push(nullptr);
+        break;
+      }
+      img->addTime("frames_received");
 
-    //   while (input_depth_queue.try_pop(depth_guess)) continue;
-    //   if (show_gui) img->depth_guess = depth_guess;
+      while (input_depth_queue.try_pop(depth_guess)) continue;
+      if (show_gui) img->depth_guess = depth_guess;
 
-    //   while (input_lm_bundle_queue.try_pop(latest_lm_bundle)) continue;
+      while (input_lm_bundle_queue.try_pop(latest_lm_bundle)) continue;
 
-    //   if (!input_state_queue.empty()) {
-    //     while (input_state_queue.try_pop(latest_state)) continue;  // Flush
-    //     first_state_arrived = true;
-    //   } else if (first_state_arrived) {
-    //     latest_state = make_shared<PoseVelBiasState<double>>(*predicted_state);
-    //   }
+      if (!input_state_queue.empty()) {
+        while (input_state_queue.try_pop(latest_state)) continue;  // Flush
+        first_state_arrived = true;
+      } else if (first_state_arrived) {
+        latest_state = make_shared<PoseVelBiasState<double>>(*predicted_state);
+      }
 
-    //   if (first_state_arrived) {
-    //     auto pim = processImu(img->t_ns);
-    //     pim.predictState(*latest_state, constants::g, *predicted_state);
-    //   }
+      if (first_state_arrived) {
+        auto pim = processImu(img->t_ns);
+        pim.predictState(*latest_state, constants::g, *predicted_state);
+      }
 
-    //   processFrame(img->t_ns, img);
-    // }
+      processFrame(img->t_ns, img);
+    }
   }
 
   IntegratedImuMeasurement<double> processImu(int64_t curr_t_ns) {
