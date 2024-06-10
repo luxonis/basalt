@@ -131,7 +131,11 @@ class OpticalFlowBase {
     // patch_coord = PatchT::pattern2.template cast<float>();
     depth_guess = config.optical_flow_matching_default_depth;
   }
-  ~OpticalFlowBase() { processing_thread->join(); }
+  virtual ~OpticalFlowBase() { // Make the destructor virtual
+    if (processing_thread && processing_thread->joinable()) {
+      processing_thread->join();
+    }
+  }
 
   virtual void processingLoop() = 0;
 
