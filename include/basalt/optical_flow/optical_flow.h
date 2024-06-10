@@ -132,7 +132,7 @@ class OpticalFlowBase {
     depth_guess = config.optical_flow_matching_default_depth;
   }
   virtual ~OpticalFlowBase() {  // Make the destructor virtual
-    if (processing_thread && processing_thread.joinable()) {
+    if (processing_thread.joinable()) {
       processing_thread.join();
     }
   }
