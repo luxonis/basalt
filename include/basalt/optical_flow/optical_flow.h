@@ -131,7 +131,7 @@ class OpticalFlowBase {
     // patch_coord = PatchT::pattern2.template cast<float>();
     depth_guess = config.optical_flow_matching_default_depth;
   }
-  virtual ~OpticalFlowBase() { // Make the destructor virtual
+  virtual ~OpticalFlowBase() {  // Make the destructor virtual
     if (processing_thread && processing_thread->joinable()) {
       processing_thread->join();
     }
@@ -139,7 +139,7 @@ class OpticalFlowBase {
 
   virtual void processingLoop() = 0;
 
-  void start() { processing_thread.reset(new std::thread(&OpticalFlowBase::processingLoop, this)); }
+  void start() { processing_thread = std::make_shared<std::thread>(&OpticalFlowBase::processingLoop, this); }
 
   virtual inline void drain_input_queues() {
     while (!input_img_queue.empty()) {
