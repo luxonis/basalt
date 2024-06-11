@@ -139,7 +139,10 @@ class OpticalFlowBase {
 
   virtual void processingLoop() = 0;
 
-  void start() { processing_thread = std::make_shared<std::thread>(&OpticalFlowBase::processingLoop, this); }
+  void start() { 
+    auto thread = std::make_shared<std::thread>(&OpticalFlowBase::processingLoop, this);
+    processing_thread = thread;
+    }
 
   virtual inline void drain_input_queues() {
     while (!input_img_queue.empty()) {
