@@ -119,6 +119,14 @@ class FrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
     for (size_t i = 0; i < getNumCams(); i++) cells.at(i).setZero(h / c + 1, w / c + 1);
   }
 
+  // Delete copy constructor and copy assignment operator
+  FrameToFrameOpticalFlow(const FrameToFrameOpticalFlow&) = delete;
+  FrameToFrameOpticalFlow& operator=(const FrameToFrameOpticalFlow&) = delete;
+
+  // Default move constructor and move assignment operator
+  FrameToFrameOpticalFlow(FrameToFrameOpticalFlow&&) = default;
+  FrameToFrameOpticalFlow& operator=(FrameToFrameOpticalFlow&&) = default;
+
   void processingLoop() override {
     using std::make_shared;
     OpticalFlowInput::Ptr img;

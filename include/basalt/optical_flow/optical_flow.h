@@ -137,6 +137,14 @@ class OpticalFlowBase {
     }
   }
 
+  // Delete copy constructor and copy assignment operator
+  OpticalFlowBase(const OpticalFlowBase&) = delete;
+  OpticalFlowBase& operator=(const OpticalFlowBase&) = delete;
+
+  // Allow move constructor and move assignment operator
+  OpticalFlowBase(OpticalFlowBase&&) = default;
+  OpticalFlowBase& operator=(OpticalFlowBase&&) = default;
+
   virtual void processingLoop() = 0;
 
   void start() { 
@@ -232,6 +240,14 @@ class OpticalFlowTyped : public OpticalFlowBase {
       E[i] = Ed.cast<Scalar>();
     }
   }
+
+  // Delete copy constructor and copy assignment operator
+  OpticalFlowTyped(const OpticalFlowTyped&) = delete;
+  OpticalFlowTyped& operator=(const OpticalFlowTyped&) = delete;
+
+  // Allow move constructor and move assignment operator
+  OpticalFlowTyped(OpticalFlowTyped&&) = default;
+  OpticalFlowTyped& operator=(OpticalFlowTyped&&) = default;
 
   size_t getNumCams() const { return calib.intrinsics.size(); }
 
