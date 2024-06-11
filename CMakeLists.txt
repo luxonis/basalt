@@ -119,7 +119,7 @@ if (TOTAL_MEMORY LESS 16000000)
 endif()
 
 # base set of compile flags
-set(BASALT_CXX_FLAGS "-Wall -Wextra -Wno-error=unused-parameter -ftemplate-backtrace-limit=0 ")
+set(BASALT_CXX_FLAGS "-Wall -Wextra -Wno-error=unused-parameter -ftemplate-backtrace-limit=0")
 
 # For avoiding libfmt >9 issues, see https://github.com/strasdat/Sophus/issues/366#issuecomment-1229178088
 add_definitions(-DFMT_DEPRECATED_OSTREAM=1)
@@ -344,7 +344,9 @@ hunter_add_package(fmt)
     src/vi_estimator/sqrt_keypoint_vo.cpp
     src/vi_estimator/vio_estimator.cpp
   )
-
+  set_property(TARGET basalt_sdk PROPERTY CXX_STANDARD 17)
+  set_property(TARGET basalt_sdk PROPERTY CXX_STANDARD_REQUIRED ON)
+  set_property(TARGET basalt_sdk PROPERTY CXX_EXTENSIONS OFF)
   target_include_directories(basalt_sdk PRIVATE
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>"
