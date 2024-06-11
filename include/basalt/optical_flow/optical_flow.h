@@ -151,7 +151,7 @@ class OpticalFlowBase {
     } else {
       std::cout << "processing_thread is not null" << std::endl;
     }
-    processing_thread =  std::make_shared<std::thread>(&OpticalFlowBase::processingLoop, this);
+    processing_thread =  std::make_unique<std::thread>(&OpticalFlowBase::processingLoop, this);
     }
 
   virtual inline void drain_input_queues() {
@@ -196,7 +196,7 @@ class OpticalFlowBase {
   VioConfig config;
 
   OpticalFlowResult::Ptr transforms;
-  std::shared_ptr<std::thread> processing_thread;
+  std::unique_ptr<std::thread> processing_thread;
   std::shared_ptr<std::vector<ManagedImagePyr<uint16_t>>> old_pyramid;
   std::shared_ptr<std::vector<ManagedImagePyr<uint16_t>>> pyramid;
 };
