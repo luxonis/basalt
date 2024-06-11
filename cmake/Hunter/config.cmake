@@ -2,12 +2,15 @@
 hunter_config(
     Eigen
     VERSION 3.4.0
+    CMAKE_ARGS
+        EIGEN_DONT_PARALLELIZE=ON
+        EIGEN_INITIALIZE_MATRICES_BY_NAN=ON
 )
 hunter_config(
     basalt-headers
     VERSION 0.1.0
     URL "https://github.com/luxonis/basalt-headers/archive/refs/heads/hunter.zip"
-    SHA1 "740cdd6ea5bcb303e1b2334530f85a7dbf4a644d"
+    SHA1 "da1e955bf68099312e8f920f8fd35a433af4558a"
 )
 hunter_config(
     Sophus
@@ -26,6 +29,12 @@ hunter_config(
     SHA1 "6587337e36045f1b5f68c902f5e04a76d8999e02"
 )
 
+hunter_config(
+    fmt
+    VERSION 8.1.1
+    CMAKE_ARGS
+        BUILD_SHARED_LIBS=ON
+    )
 
 
 hunter_config(
