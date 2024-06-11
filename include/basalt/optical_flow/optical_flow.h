@@ -145,6 +145,12 @@ class OpticalFlowBase {
     } else {
       std::cout << "processing_thread is not null" << std::endl;
     }
+    processing_thread.reset();
+      if(processing_thread==nullptr){
+      std::cout << "processing_thread is null" << std::endl;
+    } else {
+      std::cout << "processing_thread is not null" << std::endl;
+    }
     processing_thread =  std::make_shared<std::thread>(&OpticalFlowBase::processingLoop, this);
     }
 
