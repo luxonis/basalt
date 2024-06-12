@@ -130,6 +130,12 @@ class OpticalFlowBase {
     // patch_coord is initialized in OpticalFlowTyped since we need the Pattern type
     // patch_coord = PatchT::pattern2.template cast<float>();
     depth_guess = config.optical_flow_matching_default_depth;
+    input_img_queue = std::make_shared<tbb::concurrent_bounded_queue<OpticalFlowInput::Ptr>>();
+    input_imu_queue = std::make_shared<tbb::concurrent_bounded_queue<ImuData<double>::Ptr>>();
+    input_depth_queue = std::make_shared<tbb::concurrent_queue<double>>();
+    input_state_queue = std::make_shared<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>>();
+    input_lm_bundle_queue = std::make_shared<tbb::concurrent_queue<LandmarkBundle::Ptr>>();
+    output_queue = std::make_shared<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>>();
   }
   virtual ~OpticalFlowBase() {  // Make the destructor virtual
     if (processing_thread && processing_thread->joinable()) {
@@ -175,7 +181,7 @@ class OpticalFlowBase {
   std::shared_ptr<tbb::concurrent_queue<double>> input_depth_queue;
   std::shared_ptr<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>> input_state_queue;
   std::shared_ptr<tbb::concurrent_queue<LandmarkBundle::Ptr>> input_lm_bundle_queue;
-  std::shared_ptr<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>> output_queue = nullptr;
+  std::shared_ptr<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>> output_queue;
 
   Eigen::MatrixXf patch_coord;
   double depth_guess = -1;

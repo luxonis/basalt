@@ -23,7 +23,7 @@ hunter_config(
     basalt-headers
     VERSION 0.1.0
     URL "https://github.com/luxonis/basalt-headers/archive/refs/heads/hunter.zip"
-    SHA1 "da1e955bf68099312e8f920f8fd35a433af4558a"
+    SHA1 "958c2c322fd9ff902cdd45139255e88219ac7079"
 )
 hunter_config(
     Sophus

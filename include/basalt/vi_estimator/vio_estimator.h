@@ -86,7 +86,16 @@ class VioEstimatorBase {
  public:
   typedef std::shared_ptr<VioEstimatorBase> Ptr;
 
-  VioEstimatorBase() : out_state_queue(nullptr), out_marg_queue(nullptr), out_vis_queue(nullptr) {
+  VioEstimatorBase() {
+    vision_data_queue = std::make_shared<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>>();
+    imu_data_queue = std::make_shared<tbb::concurrent_bounded_queue<ImuData<double>::Ptr>>();
+    out_state_queue = std::make_shared<tbb::concurrent_bounded_queue<PoseVelBiasState<double>::Ptr>>();
+    out_marg_queue = std::make_shared<tbb::concurrent_bounded_queue<MargData::Ptr>>();
+    out_vis_queue = std::make_shared<tbb::concurrent_bounded_queue<VioVisualizationData::Ptr>>();
+    opt_flow_depth_guess_queue = std::make_shared<tbb::concurrent_queue<double>>();
+    opt_flow_state_queue = std::make_shared<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>>();
+    opt_flow_lm_bundle_queue = std::make_shared<tbb::concurrent_queue<LandmarkBundle::Ptr>>();
+    opt_flow_masks_queue = std::make_shared<tbb::concurrent_queue<Masks>>();
     vision_data_queue->set_capacity(10);
     imu_data_queue->set_capacity(300);
     last_processed_t_ns = 0;
@@ -101,14 +110,14 @@ class VioEstimatorBase {
   std::shared_ptr<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>> vision_data_queue;
   std::shared_ptr<tbb::concurrent_bounded_queue<ImuData<double>::Ptr>> imu_data_queue;
 
-  std::shared_ptr<tbb::concurrent_bounded_queue<PoseVelBiasState<double>::Ptr>> out_state_queue = nullptr;
-  std::shared_ptr<tbb::concurrent_bounded_queue<MargData::Ptr>> out_marg_queue = nullptr;
-  std::shared_ptr<tbb::concurrent_bounded_queue<VioVisualizationData::Ptr>> out_vis_queue = nullptr;
+  std::shared_ptr<tbb::concurrent_bounded_queue<PoseVelBiasState<double>::Ptr>> out_state_queue;
+  std::shared_ptr<tbb::concurrent_bounded_queue<MargData::Ptr>> out_marg_queue;
+  std::shared_ptr<tbb::concurrent_bounded_queue<VioVisualizationData::Ptr>> out_vis_queue;
 
-  std::shared_ptr<tbb::concurrent_queue<double>> opt_flow_depth_guess_queue = nullptr;
-  std::shared_ptr<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>> opt_flow_state_queue = nullptr;
-  std::shared_ptr<tbb::concurrent_queue<LandmarkBundle::Ptr>> opt_flow_lm_bundle_queue = nullptr;
-  std::shared_ptr<tbb::concurrent_queue<Masks>> opt_flow_masks_queue = nullptr;
+  std::shared_ptr<tbb::concurrent_queue<double>> opt_flow_depth_guess_queue;
+  std::shared_ptr<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>> opt_flow_state_queue ;
+  std::shared_ptr<tbb::concurrent_queue<LandmarkBundle::Ptr>> opt_flow_lm_bundle_queue;
+  std::shared_ptr<tbb::concurrent_queue<Masks>> opt_flow_masks_queue;
 
   virtual void initialize(int64_t t_ns, const Sophus::SE3d& T_w_i, const Eigen::Vector3d& vel_w_i,
                           const Eigen::Vector3d& bg, const Eigen::Vector3d& ba) = 0;

@@ -75,17 +75,6 @@ if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release)
 endif()
 
-if(NOT CXX_MARCH)
-  set(CXX_MARCH native)
-endif()
-
-IF(NOT APPLE OR NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
-  set(BASALT_MARCH_FLAGS "-march=${CXX_MARCH}")
-ELSE()
-  message(STATUS "Running on Apple ${CMAKE_SYSTEM_PROCESSOR}. Disabled -march flag.")
-ENDIF()
-
-
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -274,7 +263,7 @@ endif()
 
 
 # setup combined compiler flags
-set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS} ${BASALT_MARCH_FLAGS} ${BASALT_PASSED_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS}${BASALT_PASSED_CXX_FLAGS}")
 
 
 # NOTE: not specifying version, since 2, 3 or 4 is fine
