@@ -277,14 +277,6 @@ endif()
 set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS} ${BASALT_MARCH_FLAGS} ${BASALT_PASSED_CXX_FLAGS}")
 
 
-
-find_package(TBB REQUIRED)
-message(STATUS "Found TBB ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} (interface version ${TBB_INTERFACE_VERSION}) headers in: ${TBB_INCLUDE_DIRS}")
-if (TBB_INTERFACE_VERSION LESS 11004)
-  # enable global_control header for earlier TBB versions (Ubuntu 16.04, 18.04)
-  add_definitions(-DTBB_PREVIEW_GLOBAL_CONTROL)
-endif()
-
 # NOTE: not specifying version, since 2, 3 or 4 is fine
 find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d highgui)
 message(STATUS "Found OpenCV ${OpenCV_VERSION} headers in: ${OpenCV_INCLUDE_DIRS}")
@@ -302,6 +294,7 @@ hunter_add_package(nlohmann_json)
 add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
 set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
+hunter_add_package(oneTBB)
 hunter_add_package(basalt-headers)
 hunter_add_package(Eigen)
 hunter_add_package(cereal)
@@ -311,6 +304,8 @@ hunter_add_package(opengv)
 hunter_add_package(fmt)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads REQUIRED)
+  find_package(TBB 2021.12.0 EXACT CONFIG REQUIRED)
+  message(STATUS "Found TBB ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} (interface version ${TBB_INTERFACE_VERSION}) headers in: ${TBB_INCLUDE_DIRS}")
   find_package(Eigen3 CONFIG REQUIRED)
   find_package(basalt-headers CONFIG REQUIRED)
   find_package(cereal CONFIG REQUIRED)
@@ -396,6 +391,14 @@ hunter_add_package(fmt)
 
 
 else()
+
+find_package(TBB REQUIRED)
+message(STATUS "Found TBB ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} (interface version ${TBB_INTERFACE_VERSION}) headers in: ${TBB_INCLUDE_DIRS}")
+if (TBB_INTERFACE_VERSION LESS 11004)
+  # enable global_control header for earlier TBB versions (Ubuntu 16.04, 18.04)
+  add_definitions(-DTBB_PREVIEW_GLOBAL_CONTROL)
+endif()
+
 
 set(EIGEN_INCLUDE_DIR_HINTS ${EIGEN_ROOT})
 find_package(Eigen3 3.4.0 EXACT REQUIRED NO_MODULE)
