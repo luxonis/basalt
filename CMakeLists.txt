@@ -282,11 +282,6 @@ find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d highgui)
 message(STATUS "Found OpenCV ${OpenCV_VERSION} headers in: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
 
-# Add our own custom scoped opencv target since none is provided by OpenCV itself
-add_library(basalt::opencv INTERFACE IMPORTED)
-set_property(TARGET basalt::opencv PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${OpenCV_INCLUDE_DIRS})
-set_property(TARGET basalt::opencv PROPERTY INTERFACE_LINK_LIBRARIES ${OpenCV_LIBS})
-
 
 
 if(BASALT_SDK_ONLY)
@@ -347,7 +342,7 @@ hunter_add_package(fmt)
   )
   target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
 
-  target_link_libraries(basalt_sdk PRIVATE basalt::opencv Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt opengv)
+  target_link_libraries(basalt_sdk PRIVATE ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt opengv)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
@@ -387,6 +382,11 @@ hunter_add_package(fmt)
 
 
 else()
+# Add our own custom scoped opencv target since none is provided by OpenCV itself
+add_library(basalt::opencv INTERFACE IMPORTED)
+set_property(TARGET basalt::opencv PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${OpenCV_INCLUDE_DIRS})
+set_property(TARGET basalt::opencv PROPERTY INTERFACE_LINK_LIBRARIES ${OpenCV_LIBS})
+
 
 find_package(TBB REQUIRED)
 message(STATUS "Found TBB ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} (interface version ${TBB_INTERFACE_VERSION}) headers in: ${TBB_INCLUDE_DIRS}")
