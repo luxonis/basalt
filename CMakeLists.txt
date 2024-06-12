@@ -346,11 +346,8 @@ hunter_add_package(fmt)
     "$<INSTALL_INTERFACE:include>"
   )
   target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
-  target_link_options(basalt_sdk PRIVATE     
-    LINKER:--whole-archive
-    LINKER:-lpthread
-    LINKER:--no-whole-archive)
-  target_link_libraries(basalt_sdk PRIVATE Threads::Threads basalt::opencv TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt opengv)
+
+  target_link_libraries(basalt_sdk PRIVATE basalt::opencv Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt opengv)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 

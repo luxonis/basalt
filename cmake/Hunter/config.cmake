@@ -15,6 +15,8 @@ hunter_config(
     CMAKE_ARGS
         TBB_PREVIEW_GLOBAL_CONTROL=ON
         TBB_TEST=OFF
+        CMAKE_CXX_VISIBILITY_PRESET=hidden
+        CMAKE_C_VISIBILITY_PRESET=hidden
 )
 
 hunter_config(
@@ -28,6 +30,7 @@ hunter_config(
     VERSION 1.22.10
     URL "https://github.com/luxonis/Sophus/archive/refs/heads/hunterized.zip"
     SHA1 "ff17d3dce1bcadabbc9fb83845a29974377d7f95" 
+    CMAKE_ARGS
         BUILD_SOPHUS_TESTS=OFF
         BUILD_SOPHUS_EXAMPLES=OFF
 )
