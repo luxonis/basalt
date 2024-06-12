@@ -15,7 +15,6 @@ hunter_config(
     CMAKE_ARGS
         TBB_PREVIEW_GLOBAL_CONTROL=ON
         TBB_TEST=OFF
-        BUILD_SHARED_LIBS=ON
 )
 
 hunter_config(
