@@ -125,8 +125,8 @@ class OpticalFlowBase {
   using Ptr = std::shared_ptr<OpticalFlowBase>;
 
   OpticalFlowBase(const VioConfig& conf) : config(conf) {
-    input_img_queue.set_capacity(10);
-    input_imu_queue.set_capacity(300);
+    input_img_queue->set_capacity(10);
+    input_imu_queue->set_capacity(300);
     // patch_coord is initialized in OpticalFlowTyped since we need the Pattern type
     // patch_coord = PatchT::pattern2.template cast<float>();
     depth_guess = config.optical_flow_matching_default_depth;
@@ -152,30 +152,30 @@ class OpticalFlowBase {
     }
 
   virtual inline void drain_input_queues() {
-    while (!input_img_queue.empty()) {
+    while (!input_img_queue->empty()) {
       OpticalFlowInput::Ptr _;
-      input_img_queue.pop(_);
+      input_img_queue->pop(_);
     }
-    while (!input_imu_queue.empty()) {
+    while (!input_imu_queue->empty()) {
       ImuData<double>::Ptr _;
-      input_imu_queue.pop(_);
+      input_imu_queue->pop(_);
     }
-    while (!input_depth_queue.empty()) {
+    while (!input_depth_queue->empty()) {
       double _;
-      input_depth_queue.try_pop(_);
+      input_depth_queue->try_pop(_);
     }
-    while (!input_state_queue.empty()) {
+    while (!input_state_queue->empty()) {
       PoseVelBiasState<double>::Ptr _;
-      input_state_queue.try_pop(_);
+      input_state_queue->try_pop(_);
     }
   }
 
-  tbb::concurrent_bounded_queue<OpticalFlowInput::Ptr> input_img_queue;
-  tbb::concurrent_bounded_queue<ImuData<double>::Ptr> input_imu_queue;
-  tbb::concurrent_queue<double> input_depth_queue;
-  tbb::concurrent_queue<PoseVelBiasState<double>::Ptr> input_state_queue;
-  tbb::concurrent_queue<LandmarkBundle::Ptr> input_lm_bundle_queue;
-  tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>* output_queue = nullptr;
+  std::shared_ptr<tbb::concurrent_bounded_queue<OpticalFlowInput::Ptr>> input_img_queue;
+  std::shared_ptr<tbb::concurrent_bounded_queue<ImuData<double>::Ptr>> input_imu_queue;
+  std::shared_ptr<tbb::concurrent_queue<double>> input_depth_queue;
+  std::shared_ptr<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>> input_state_queue;
+  std::shared_ptr<tbb::concurrent_queue<LandmarkBundle::Ptr>> input_lm_bundle_queue;
+  std::shared_ptr<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>> output_queue = nullptr;
 
   Eigen::MatrixXf patch_coord;
   double depth_guess = -1;

@@ -93,8 +93,8 @@ SqrtKeypointVoEstimator<Scalar_>::SqrtKeypointVoEstimator(const basalt::Calibrat
   max_states = config.vio_max_states;
   max_kfs = config.vio_max_kfs;
 
-  vision_data_queue.set_capacity(10);
-  imu_data_queue.set_capacity(300);
+  vision_data_queue->set_capacity(10);
+  imu_data_queue->set_capacity(300);
 }
 
 template <class Scalar_>
@@ -127,11 +127,11 @@ void SqrtKeypointVoEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg, con
 
     while (true) {
       // get next optical flow result (blocking if queue empty)
-      vision_data_queue.pop(curr_frame);
+      vision_data_queue->pop(curr_frame);
 
       if (config.vio_enforce_realtime) {
         // drop current frame if another frame is already in the queue.
-        while (!vision_data_queue.empty()) vision_data_queue.pop(curr_frame);
+        while (!vision_data_queue->empty()) vision_data_queue->pop(curr_frame);
       }
 
       if (!curr_frame.get()) {
@@ -144,9 +144,9 @@ void SqrtKeypointVoEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg, con
       // curr_frame->t_ns += calib.cam_time_offset_ns;
 
       // this is VO not VIO --> just drain IMU queue and ignore
-      while (!imu_data_queue.empty()) {
+      while (!imu_data_queue->empty()) {
         ImuData<double>::Ptr d;
-        imu_data_queue.pop(d);
+        imu_data_queue->pop(d);
       }
 
       if (!initialized) {
@@ -190,7 +190,7 @@ void SqrtKeypointVoEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg, con
 
 template <class Scalar_>
 void SqrtKeypointVoEstimator<Scalar_>::addVisionToQueue(const OpticalFlowResult::Ptr& data) {
-  vision_data_queue.push(data);
+  vision_data_queue->push(data);
 }
 
 template <class Scalar_>

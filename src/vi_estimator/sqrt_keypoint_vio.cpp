@@ -114,8 +114,8 @@ SqrtKeypointVioEstimator<Scalar_>::SqrtKeypointVioEstimator(const Eigen::Vector3
 
   opt_started = false;
 
-  vision_data_queue.set_capacity(10);
-  imu_data_queue.set_capacity(300);
+  vision_data_queue->set_capacity(10);
+  imu_data_queue->set_capacity(300);
 }
 
 template <class Scalar>
@@ -249,11 +249,11 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
         if (exit_requested) break;
       }
 
-      vision_data_queue.pop(curr_frame);
+      vision_data_queue->pop(curr_frame);
 
       if (config.vio_enforce_realtime) {
         // drop current frame if another frame is already in the queue.
-        while (!vision_data_queue.empty()) vision_data_queue.pop(curr_frame);
+        while (!vision_data_queue->empty()) vision_data_queue->pop(curr_frame);
       }
 
       if (!curr_frame.get()) {
@@ -366,18 +366,18 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
 
 template <class Scalar_>
 void SqrtKeypointVioEstimator<Scalar_>::addIMUToQueue(const ImuData<double>::Ptr& data) {
-  imu_data_queue.emplace(data);
+  imu_data_queue->emplace(data);
 }
 
 template <class Scalar_>
 void SqrtKeypointVioEstimator<Scalar_>::addVisionToQueue(const OpticalFlowResult::Ptr& data) {
-  vision_data_queue.push(data);
+  vision_data_queue->push(data);
 }
 
 template <class Scalar_>
 typename ImuData<Scalar_>::Ptr SqrtKeypointVioEstimator<Scalar_>::popFromImuDataQueue() {
   ImuData<double>::Ptr data;
-  imu_data_queue.pop(data);
+  imu_data_queue->pop(data);
 
   if constexpr (std::is_same_v<Scalar, double>) {
     return data;

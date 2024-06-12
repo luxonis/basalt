@@ -105,7 +105,7 @@ class MultiscaleFrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Patter
     OpticalFlowInput::Ptr img;
 
     while (true) {
-      input_img_queue.pop(img);
+      input_img_queue->pop(img);
 
       if (img == nullptr) {
         if (output_queue) output_queue->push(nullptr);
@@ -113,11 +113,11 @@ class MultiscaleFrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Patter
       }
       img->addTime("frames_received");
 
-      while (input_depth_queue.try_pop(depth_guess)) continue;
+      while (input_depth_queue->try_pop(depth_guess)) continue;
       if (show_gui) img->depth_guess = depth_guess;
 
-      if (!input_state_queue.empty()) {
-        while (input_state_queue.try_pop(latest_state)) continue;  // Flush
+      if (!input_state_queue->empty()) {
+        while (input_state_queue->try_pop(latest_state)) continue;  // Flush
         first_state_arrived = true;
       } else if (first_state_arrived) {
         latest_state = make_shared<PoseVelBiasState<double>>(*predicted_state);
@@ -138,10 +138,10 @@ class MultiscaleFrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Patter
     Vector3d ba = latest_state->bias_accel;
     IntegratedImuMeasurement<double> pim{prev_t_ns, bg, ba};
 
-    if (input_imu_queue.empty()) return pim;
+    if (input_imu_queue->empty()) return pim;
 
     auto pop_imu = [&](ImuData<double>::Ptr& data) -> bool {
-      input_imu_queue.pop(data);  // Blocking pop
+      input_imu_queue->pop(data);  // Blocking pop
       if (data == nullptr) return false;
 
       // Calibrate sample
