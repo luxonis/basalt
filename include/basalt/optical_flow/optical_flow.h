@@ -137,11 +137,8 @@ class OpticalFlowBase {
     // patch_coord = PatchT::pattern2.template cast<float>();
     depth_guess = config.optical_flow_matching_default_depth;
   }
-  virtual ~OpticalFlowBase() {  // Make the destructor virtual
-    if (processing_thread && processing_thread->joinable()) {
-      processing_thread->join();
-    }
-  }
+
+  virtual void maybe_join() = 0;
 
   // Delete copy constructor and copy assignment operator
   OpticalFlowBase(const OpticalFlowBase&) = delete;

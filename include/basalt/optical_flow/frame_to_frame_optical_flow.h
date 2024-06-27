@@ -127,6 +127,15 @@ class FrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
   FrameToFrameOpticalFlow(FrameToFrameOpticalFlow&&) = default;
   FrameToFrameOpticalFlow& operator=(FrameToFrameOpticalFlow&&) = default;
 
+  virtual ~FrameToFrameOpticalFlow() { maybe_join(); }
+
+  inline void maybe_join() override {
+    if (processing_thread) {
+      processing_thread->join();
+      processing_thread.reset();
+    }
+  }
+
   void processingLoop() override {
     using std::make_shared;
     OpticalFlowInput::Ptr img;

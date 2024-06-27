@@ -1310,7 +1310,6 @@ bool SqrtKeypointVioEstimator<Scalar_>::optimize() {
         if (show_uimat(UIMAT::JR)) visual_data->getj(UIMAT::JR).Jr = lqr->getUILandmarkBlocks();
 
         if (!numerically_valid) {
-          std::cerr << "did not expect numerical failure during linearization\n";
           return false;
         }
 

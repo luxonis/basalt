@@ -101,6 +101,16 @@ class PatchOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
     patches.reserve(3000);
   }
 
+  virtual ~PatchOpticalFlow() { maybe_join(); }
+
+  inline void maybe_join() override {
+    if (processing_thread) {
+      processing_thread->join();
+      processing_thread.reset();
+    }
+  }
+
+
   void processingLoop() override {
     using std::make_shared;
     OpticalFlowInput::Ptr img;

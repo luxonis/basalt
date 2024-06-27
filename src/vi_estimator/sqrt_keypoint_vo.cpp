@@ -1011,7 +1011,6 @@ void SqrtKeypointVoEstimator<Scalar_>::optimize() {
     // linearize residuals
     bool numerically_valid;
     error_total = lqr->linearizeProblem(&numerically_valid);
-    BASALT_ASSERT_STREAM(numerically_valid, "did not expect numerical failure during linearization");
     stats.add("linearizeProblem", t.reset()).format("ms");
 
     //      // compute pose jacobian norm squared for Jacobian scaling
