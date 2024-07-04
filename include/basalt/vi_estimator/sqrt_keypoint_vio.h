@@ -104,9 +104,8 @@ class SqrtKeypointVioEstimator : public VioEstimatorBase, public SqrtBundleAdjus
   virtual ~SqrtKeypointVioEstimator() { maybe_join(); }
 
   inline void maybe_join() override {
-    if (processing_thread) {
+    if (processing_thread->joinable()) {
       processing_thread->join();
-      processing_thread.reset();
     }
   }
 
@@ -250,7 +249,7 @@ class SqrtKeypointVioEstimator : public VioEstimatorBase, public SqrtBundleAdjus
   constexpr static Scalar initial_vee = Scalar(2.0);
   Scalar lambda, min_lambda, max_lambda, lambda_vee;
 
-  std::shared_ptr<std::thread> processing_thread;
+  std::unique_ptr<std::thread> processing_thread;
 
   // timing and stats
   ExecutionStats stats_all_;

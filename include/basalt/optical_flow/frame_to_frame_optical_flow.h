@@ -130,9 +130,8 @@ class FrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
   virtual ~FrameToFrameOpticalFlow() { maybe_join(); }
 
   inline void maybe_join() override {
-    if (processing_thread) {
+    if (processing_thread->joinable()) {
       processing_thread->join();
-      processing_thread.reset();
     }
   }
 

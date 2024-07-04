@@ -151,7 +151,7 @@ class OpticalFlowBase {
   virtual void processingLoop() = 0;
 
   void start() { 
-    processing_thread =  std::make_unique<std::thread>(&OpticalFlowBase::processingLoop, this);
+    processing_thread = std::make_unique<std::thread>(&OpticalFlowBase::processingLoop, this);
     }
 
   virtual inline void drain_input_queues() {

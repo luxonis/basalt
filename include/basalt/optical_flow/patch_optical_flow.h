@@ -104,9 +104,8 @@ class PatchOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
   virtual ~PatchOpticalFlow() { maybe_join(); }
 
   inline void maybe_join() override {
-    if (processing_thread) {
+    if (processing_thread->joinable()) {
       processing_thread->join();
-      processing_thread.reset();
     }
   }
 

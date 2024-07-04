@@ -361,7 +361,7 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
     std::cout << "Finished VIOFilter " << std::endl;
   };
 
-  processing_thread.reset(new std::thread(proc_func));
+  processing_thread = std::make_unique<std::thread>(proc_func);
 }
 
 template <class Scalar_>
