@@ -108,13 +108,15 @@ if (TOTAL_MEMORY LESS 16000000)
 endif()
 
 # base set of compile flags
-set(BASALT_CXX_FLAGS "-Wall -Wextra -Wno-error=unused-parameter -ftemplate-backtrace-limit=0")
+set (BASALT_CXX_FLAGS)
 
 # For avoiding libfmt >9 issues, see https://github.com/strasdat/Sophus/issues/366#issuecomment-1229178088
 add_definitions(-DFMT_DEPRECATED_OSTREAM=1)
 
 # clang-specific compile flags
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  set(BASALT_CXX_FLAGS "-Wall -Wextra -Wno-error=unused-parameter -ftemplate-backtrace-limit=0")
+
   set(BASALT_CXX_FLAGS "${BASALT_CXX_FLAGS} -Wno-exceptions -fcolor-diagnostics -frelaxed-template-template-args -Wno-error=deprecated-declarations")
 
   if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
@@ -136,7 +138,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "App
     endif()
     add_definitions(-DTBB_USE_GLIBCXX_VERSION=${TBB_USE_GLIBCXX_VERSION})
   endif()
-else()
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  set(BASALT_CXX_FLAGS "-Wall -Wextra -Wno-error=unused-parameter -ftemplate-backtrace-limit=0")
+
   set(BASALT_CXX_FLAGS "${BASALT_CXX_FLAGS} -Wno-error=maybe-uninitialized -Wno-error=implicit-fallthrough -fdiagnostics-color=always")
 
   if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9)
