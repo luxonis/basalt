@@ -55,9 +55,3 @@ hunter_config(
     SHA1 "c9a27f6ff8311f0c6b2adb959d0598f079fcc9f3"
 )
 
-hunter_config(
-    opengv
-    VERSION 1.0.0
-    URL "https://github.com/luxonis/opengv/archive/refs/heads/master.zip"
-    SHA1 "5898069592f3e7484d9e83d918dad9287876d103"
-)

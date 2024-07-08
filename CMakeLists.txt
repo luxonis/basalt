@@ -284,7 +284,6 @@ hunter_add_package(Eigen)
 hunter_add_package(cereal)
 hunter_add_package(Sophus)
 hunter_add_package(magic_enum)
-hunter_add_package(opengv)
 hunter_add_package(fmt)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads REQUIRED)
@@ -294,7 +293,6 @@ hunter_add_package(fmt)
   find_package(cereal CONFIG REQUIRED)
   find_package(Sophus CONFIG REQUIRED)
   find_package(magic_enum CONFIG REQUIRED)
-  find_package(opengv CONFIG REQUIRED)
   find_package(fmt REQUIRED)
   configure_file(
     ${PROJECT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
@@ -331,7 +329,7 @@ hunter_add_package(fmt)
   )
   target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
 
-  target_link_libraries(basalt_sdk PRIVATE ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt opengv)
+  target_link_libraries(basalt_sdk PRIVATE ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
 
   target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
