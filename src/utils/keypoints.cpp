@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#ifndef BASALT_BUILD_SHARED_LIBRARY_ONLY
+#if !defined(BASALT_BUILD_SHARED_LIBRARY_ONLY) && !defined(BASALT_SDK_ONLY)
 #include <opengv/relative_pose/CentralRelativeAdapter.hpp>
 #include <opengv/relative_pose/methods.hpp>
 #include <opengv/sac/Ransac.hpp>
@@ -344,7 +344,7 @@ void matchDescriptors(const std::vector<std::bitset<256>>& corner_descriptors_1,
 }
 
 // Disabled to remove opengv dependency for faster build times
-#ifndef BASALT_BUILD_SHARED_LIBRARY_ONLY
+#if !defined(BASALT_BUILD_SHARED_LIBRARY_ONLY) && !defined(BASALT_SDK_ONLY)
 void findInliersRansac(const KeypointsData& kd1, const KeypointsData& kd2, const double ransac_thresh,
                        const int ransac_min_inliers, MatchData& md) {
   md.inliers.clear();

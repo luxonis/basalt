@@ -323,6 +323,7 @@ hunter_add_package(fmt)
   set_property(TARGET basalt_sdk PROPERTY CXX_STANDARD 17)
   set_property(TARGET basalt_sdk PROPERTY CXX_STANDARD_REQUIRED ON)
   set_property(TARGET basalt_sdk PROPERTY CXX_EXTENSIONS OFF)
+  # target_compile_definitions(basalt_sdk PUBLIC BASALT_SDK_ONLY)
   target_include_directories(basalt_sdk PRIVATE
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>"
