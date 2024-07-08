@@ -44,6 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <basalt/utils/imu_types.h>
 #include <memory>
 #include <vector>
+#include <limits> 
 
 namespace basalt::vis {
 
@@ -51,7 +52,7 @@ struct UILandmarkBlock {
   using MatrixXfr = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   using LandmarkId = size_t;
   std::shared_ptr<MatrixXfr> storage;
-  LandmarkId lmid = static_cast<int>(-1);
+  LandmarkId lmid = std::numeric_limits<LandmarkId>::max();
 };
 
 struct UILandmarkBlocks {
