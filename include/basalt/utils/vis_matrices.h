@@ -51,7 +51,7 @@ struct UILandmarkBlock {
   using MatrixXfr = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   using LandmarkId = size_t;
   std::shared_ptr<MatrixXfr> storage;
-  LandmarkId lmid = -1;
+  LandmarkId lmid = static_cast<int>(-1);
 };
 
 struct UILandmarkBlocks {

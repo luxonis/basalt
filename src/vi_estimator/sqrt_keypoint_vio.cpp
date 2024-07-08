@@ -105,7 +105,6 @@ SqrtKeypointVioEstimator<Scalar_>::SqrtKeypointVioEstimator(const Eigen::Vector3
     marg_data.H.diagonal().template segment<3>(12).array() = Scalar(config.vio_init_bg_weight);
   }
 
-
   gyro_bias_sqrt_weight = calib.gyro_bias_std.array().inverse();
   accel_bias_sqrt_weight = calib.accel_bias_std.array().inverse();
 
@@ -193,7 +192,6 @@ bool SqrtKeypointVioEstimator<Scalar>::resetState(typename IntegratedImuMeasurem
     marg_data.H.diagonal().template segment<3>(9).array() = Scalar(config.vio_init_ba_weight);
     marg_data.H.diagonal().template segment<3>(12).array() = Scalar(config.vio_init_bg_weight);
   }
-
 
   opt_started = false;
   schedule_reset = false;
@@ -295,7 +293,6 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
         marg_data.order.total_size = POSE_VEL_BIAS_SIZE;
         marg_data.order.items = 1;
 
-
         if (config.vio_debug || config.vio_extended_logging) {
           logMargNullspace();
         }
@@ -357,7 +354,6 @@ void SqrtKeypointVioEstimator<Scalar_>::initialize(const Eigen::Vector3d& bg_, c
     if (out_state_queue) out_state_queue->push(nullptr);
 
     finished = true;
-
   };
 
   processing_thread = std::make_unique<std::thread>(proc_func);
@@ -456,8 +452,8 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
 
   if (config.vio_debug) {
     for (int i = 0; i < NUM_CAMS; i++) {
-      std::cout << "connected[" << i << "] = " << connected[i] << ", "
-                << "unconnected[" << i << "] =" << unconnected_obs[i].size() << std::endl;
+      std::cout << "connected[" << i << "] = " << connected[i] << ", " << "unconnected[" << i
+                << "] =" << unconnected_obs[i].size() << std::endl;
     }
   }
 
@@ -576,9 +572,9 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
   size_t num_cams = opt_flow_meas->keypoints.size();
 
   bool features_cap = false;
-  #ifdef VIT_INTERFACE_IMPLEMENTATION
-  features_cap= (opt_flow_meas->input_images->stats.enabled_caps & VIT_TRACKER_POSE_CAPABILITY_FEATURES) != 0;
-  #endif
+#ifdef VIT_INTERFACE_IMPLEMENTATION
+  features_cap = (opt_flow_meas->input_images->stats.enabled_caps & VIT_TRACKER_POSE_CAPABILITY_FEATURES) != 0;
+#endif
   bool avg_depth_needed =
       opt_flow_depth_guess_queue && config.optical_flow_matching_guess_type == MatchingGuessType::REPROJ_AVG_DEPTH;
 
@@ -611,7 +607,7 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
 
       if (opt_flow_depth_guess_queue) opt_flow_depth_guess_queue->push(avg_depth);
     }
-    #ifdef VIT_INTERFACE_IMPLEMENTATION
+#ifdef VIT_INTERFACE_IMPLEMENTATION
     if (features_cap) {
       for (size_t i = 0; i < num_cams; i++) {
         for (const Eigen::Vector4d& v : projections->at(i)) {
@@ -624,7 +620,7 @@ bool SqrtKeypointVioEstimator<Scalar_>::measure(const OpticalFlowResult::Ptr& op
         }
       }
     }
-    #endif
+#endif
     if (out_state_queue) out_state_queue->push(data);
     if (opt_flow_state_queue) opt_flow_state_queue->push(data);
   }
@@ -1409,9 +1405,9 @@ bool SqrtKeypointVioEstimator<Scalar_>::optimize() {
                 continue;
               }
               const auto& [idx, size] = aom.abs_order_map.at(ts);
-              H.template block(idx, 0, size, H.cols()).setZero();
+              H.block(idx, 0, size, H.cols()).setZero();
               H.diagonal().template segment<POSE_SIZE>(idx).array() = 1e20;
-              b.template segment(idx, size).setZero();
+              b.segment(idx, size).setZero();
             }
           }
 
