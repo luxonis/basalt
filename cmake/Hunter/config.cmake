@@ -22,14 +22,14 @@ hunter_config(
 hunter_config(
     basalt-headers
     VERSION 0.1.0
-    URL "https://github.com/luxonis/basalt-headers/archive/refs/heads/hunter.zip"
-    SHA1 "958c2c322fd9ff902cdd45139255e88219ac7079"
+    URL "https://github.com/luxonis/basalt-headers/archive/e3ee456469f21a356a0a59088779b32721918f11.zip"
+    SHA1 "a3fb1771957493df7ae460693e8fad7eaac54b16"
 )
 hunter_config(
     Sophus
     VERSION 1.22.10
-    URL "https://github.com/luxonis/Sophus/archive/refs/heads/hunterized.zip"
-    SHA1 "ff17d3dce1bcadabbc9fb83845a29974377d7f95" 
+    URL "https://github.com/luxonis/Sophus/archive/54e9b230edc4df47f819cef0d15b1fcc165342df.zip"
+    SHA1 "53493ab699bf1ef5d3d8ab2892f8eaa80cf1dfc3" 
     CMAKE_ARGS
         BUILD_SOPHUS_TESTS=OFF
         BUILD_SOPHUS_EXAMPLES=OFF
