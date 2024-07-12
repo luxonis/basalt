@@ -305,13 +305,6 @@ class LandmarkBlockAbsDynamic : public LandmarkBlock<Scalar> {
     auto Qr = storage.col(res_idx).head(num_rows - 3);
     l_diff -= QJinc.transpose() * (Scalar(0.5) * QJinc + Qr);
 
-    // TODO: detect and handle case like ceres, allowing a few iterations but
-    // stopping eventually
-    if (!inc.array().isFinite().all() || !lm_ptr->direction.array().isFinite().all() ||
-        !std::isfinite(lm_ptr->inv_dist)) {
-      std::cerr << "Numerical failure in backsubstitution\n";
-    }
-
     // Note: scale only after computing model cost change
     inc.array() *= Jl_col_scale.array();
 
