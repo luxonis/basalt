@@ -45,6 +45,8 @@ hunter_config(
 hunter_config(
     fmt
     VERSION 8.1.1
+    CMAKE_CXX_VISIBILITY_PRESET=hidden
+    CMAKE_C_VISIBILITY_PRESET=hidden
     )
 
 
