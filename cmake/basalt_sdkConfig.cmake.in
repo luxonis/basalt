@@ -8,4 +8,5 @@ find_dependency(Sophus REQUIRED)
 find_dependency(cereal REQUIRED)
 find_dependency(fmt REQUIRED)
 find_dependency(magic_enum REQUIRED)
+find_dependency(nlohmann_json REQUIRED)
 

@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.10...3.18)
-include("cmake/HunterGate.cmake")
-HunterGate(
-				URL "https://github.com/cpp-pm/hunter/archive/v0.23.322.tar.gz"
-				SHA1 "cb0ea1f74f4a2c49a807de34885743495fccccbe"
-				LOCAL # Local config for dependencies
-)
+include(cmake/vcpkg.cmake)
 project(basalt)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/" ${CMAKE_MODULE_PATH})
@@ -279,20 +274,12 @@ message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
 
 
 if(BASALT_SDK_ONLY)
-	hunter_add_package(nlohmann_json)
 	add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
 	set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
-	hunter_add_package(oneTBB)
-	hunter_add_package(basalt-headers)
-	hunter_add_package(Eigen)
-	hunter_add_package(cereal)
-	hunter_add_package(Sophus)
-	hunter_add_package(magic_enum)
-	hunter_add_package(fmt)
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
 	find_package(Threads REQUIRED)
-	find_package(TBB 2021.12.0 EXACT CONFIG REQUIRED)
+	find_package(TBB  CONFIG REQUIRED)
 	find_package(Eigen3 CONFIG REQUIRED)
 	find_package(basalt-headers CONFIG REQUIRED)
 	find_package(cereal CONFIG REQUIRED)
