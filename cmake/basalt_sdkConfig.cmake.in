@@ -2,7 +2,7 @@
 include("${CMAKE_CURRENT_LIST_DIR}/basalt_sdkTargets.cmake")
 check_required_components("basalt_sdk")
 find_dependency(Eigen3 REQUIRED)
-find_dependency(oneTBB REQUIRED)
+find_dependency(TBB REQUIRED)
 find_dependency(basalt-headers REQUIRED)
 find_dependency(Sophus REQUIRED)
 find_dependency(cereal REQUIRED)
