@@ -754,6 +754,11 @@ class FrameToFrameOpticalFlow : public OpticalFlowTyped<Scalar, Pattern> {
     int y = (pos.y() - y_start) / c;
     cells.at(cam_id)(y, x)--;
     transforms->keypoints.at(cam_id).erase(kpid);
+    // Also remove patches associated with the removed keypoint
+    auto it = patches.find(kpid);
+    if (it != patches.end()) {
+        patches.erase(it);
+    }
   }
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

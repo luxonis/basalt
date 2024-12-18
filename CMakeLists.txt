@@ -78,8 +78,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 # Flags used for CHECK_CXX_SOURCE_COMPILES
+if(NOT WIN32)
 set(CMAKE_REQUIRED_FLAGS "-Wno-error")
-
+endif()
 
 # save flags passed by user
 set(BASALT_PASSED_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -103,7 +104,9 @@ endif()
 
 # base set of compile flags
 set (BASALT_CXX_FLAGS)
-
+if(WIN32)
+    set(BASALT_CXX_FLAGS "/bigobj")
+endif()
 # For avoiding libfmt >9 issues, see https://github.com/strasdat/Sophus/issues/366 #issuecomment-1229178088
 add_definitions(-DFMT_DEPRECATED_OSTREAM=1)
 
@@ -258,8 +261,6 @@ endif()
 if(BASALT_INSTANTIATIONS_FLOAT)
 	list(APPEND BASALT_COMPILE_DEFINITIONS BASALT_INSTANTIATIONS_FLOAT)
 endif()
-set(TBB_USE_DEBUG)
-list(APPEND BASALT_COMPILE_DEFINITIONS TBB_USE_DEBUG)
 
 # setup combined compiler flags
 set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS}${BASALT_PASSED_CXX_FLAGS}")
@@ -269,7 +270,7 @@ set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS}${BASALT_PASSED_CXX_FLAGS}")
 find_package(OpenCV REQUIRED COMPONENTS core imgproc calib3d highgui)
 message(STATUS "Found OpenCV ${OpenCV_VERSION} headers in: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
-
+set(BASALT_SDK_ONLY ON)
 
 
 if(BASALT_SDK_ONLY)
@@ -290,6 +291,7 @@ if(BASALT_SDK_ONLY)
 				${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h
 				)
 	include_directories(include)
+
 	add_library(basalt_sdk
 				src/io/marg_data_io.cpp
 				src/linearization/landmark_block.cpp
@@ -314,6 +316,9 @@ if(BASALT_SDK_ONLY)
 	set_property(TARGET basalt_sdk PROPERTY CXX_STANDARD 17)
 	set_property(TARGET basalt_sdk PROPERTY CXX_STANDARD_REQUIRED ON)
 	set_property(TARGET basalt_sdk PROPERTY CXX_EXTENSIONS OFF)
+	include(GenerateExportHeader)
+	generate_export_header(basalt_sdk
+		EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/include/basalt/exports/basalt_sdkExport.h)
 	# target_compile_definitions(basalt_sdk PUBLIC BASALT_SDK_ONLY)
 	target_include_directories(basalt_sdk PRIVATE
 				"$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
@@ -321,7 +326,7 @@ if(BASALT_SDK_ONLY)
 		)
 	target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
 
-	target_link_libraries(basalt_sdk PUBLIC ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
+	target_link_libraries(basalt_sdk PRIVATE ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
 
 	target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
@@ -341,6 +346,12 @@ if(BASALT_SDK_ONLY)
 		DESTINATION include/basalt/utils
 		)
 
+	# Install generated export header
+	install(
+		FILES ${CMAKE_CURRENT_BINARY_DIR}/include/basalt/exports/basalt_sdkExport.h
+		DESTINATION include/basalt/exports
+	)
+
 	# install headers
 	install(DIRECTORY include/basalt
 				DESTINATION include
@@ -358,6 +369,7 @@ if(BASALT_SDK_ONLY)
 				NAMESPACE basalt_sdk::
 				DESTINATION lib/cmake/basalt_sdk
 		)
+
 
 
 else()

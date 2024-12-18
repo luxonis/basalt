@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string>
 #include <vector>
-
+#include "basalt/exports/basalt_sdkExport.h"
 namespace basalt {
 
 enum class LinearizationType { ABS_QR, ABS_SC, REL_SC };
@@ -44,8 +44,8 @@ enum class MatchingGuessType { SAME_PIXEL, REPROJ_FIX_DEPTH, REPROJ_AVG_DEPTH };
 enum class KeyframeMargCriteria { KF_MARG_DEFAULT, KF_MARG_FORWARD_VECTOR };
 
 struct VioConfig {
-  VioConfig();
-  void load(const std::string& filename);
+  BASALT_SDK_EXPORT VioConfig();
+  BASALT_SDK_EXPORT void load(const std::string& filename);
   void save(const std::string& filename);
 
   std::string optical_flow_type;
