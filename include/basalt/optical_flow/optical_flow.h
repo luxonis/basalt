@@ -59,6 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vit_implementation_helper.hpp>
 #endif
 #include <tbb/concurrent_queue.h>
+#include "basalt/exports/basalt_sdkExport.h"
 
 namespace basalt {
 
@@ -249,6 +250,6 @@ class OpticalFlowTyped : public OpticalFlowBase {
 
 class OpticalFlowFactory {
  public:
-  static OpticalFlowBase::Ptr getOpticalFlow(const VioConfig& config, const Calibration<double>& cam);
+  BASALT_SDK_EXPORT static OpticalFlowBase::Ptr getOpticalFlow(const VioConfig& config, const Calibration<double>& cam);
 };
 }  // namespace basalt

@@ -40,6 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <basalt/utils/imu_types.h>
 #include <basalt/utils/vis_matrices.h>
 #include <basalt/linearization/landmark_block.hpp>
+#include "basalt/exports/basalt_sdkExport.h"
+
 
 namespace basalt {
 
@@ -90,12 +92,9 @@ class VioEstimatorBase {
     vision_data_queue = std::make_shared<tbb::concurrent_bounded_queue<OpticalFlowResult::Ptr>>();
     imu_data_queue = std::make_shared<tbb::concurrent_bounded_queue<ImuData<double>::Ptr>>();
     out_state_queue = std::make_shared<tbb::concurrent_bounded_queue<PoseVelBiasState<double>::Ptr>>();
-    out_marg_queue = std::make_shared<tbb::concurrent_bounded_queue<MargData::Ptr>>();
-    out_vis_queue = std::make_shared<tbb::concurrent_bounded_queue<VioVisualizationData::Ptr>>();
     opt_flow_depth_guess_queue = std::make_shared<tbb::concurrent_queue<double>>();
     opt_flow_state_queue = std::make_shared<tbb::concurrent_queue<PoseVelBiasState<double>::Ptr>>();
     opt_flow_lm_bundle_queue = std::make_shared<tbb::concurrent_queue<LandmarkBundle::Ptr>>();
-    opt_flow_masks_queue = std::make_shared<tbb::concurrent_queue<Masks>>();
     vision_data_queue->set_capacity(10);
     imu_data_queue->set_capacity(300);
     last_processed_t_ns = 0;
@@ -157,7 +156,7 @@ class VioEstimatorBase {
 
 class VioEstimatorFactory {
  public:
-  static VioEstimatorBase::Ptr getVioEstimator(const VioConfig& config, const Calibration<double>& cam,
+  BASALT_SDK_EXPORT static VioEstimatorBase::Ptr getVioEstimator(const VioConfig& config, const Calibration<double>& cam,
                                                const Eigen::Vector3d& g, bool use_imu, bool use_double);
 };
 
