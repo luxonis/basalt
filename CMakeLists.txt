@@ -274,8 +274,6 @@ set(BASALT_SDK_ONLY ON)
 
 
 if(BASALT_SDK_ONLY)
-	add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
-	set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/)
 
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
 	find_package(Threads REQUIRED)
@@ -286,6 +284,7 @@ if(BASALT_SDK_ONLY)
 	find_package(Sophus CONFIG REQUIRED)
 	find_package(magic_enum CONFIG REQUIRED)
 	find_package(fmt REQUIRED)
+    find_package(nlohmann_json CONFIG REQUIRED)
 	configure_file(
 				${PROJECT_SOURCE_DIR}/include/basalt/utils/build_config.h.in
 				${PROJECT_BINARY_DIR}/include/basalt/utils/build_config.h
@@ -326,7 +325,7 @@ if(BASALT_SDK_ONLY)
 		)
 	target_include_directories(basalt_sdk PRIVATE ${PROJECT_BINARY_DIR}/include)
 
-	target_link_libraries(basalt_sdk PRIVATE ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt)
+	target_link_libraries(basalt_sdk PRIVATE ${OpenCV_LIBS} Threads::Threads TBB::tbb Eigen3::Eigen Sophus::Sophus magic_enum::magic_enum fmt::fmt nlohmann_json::nlohmann_json)
 
 	target_compile_definitions(basalt_sdk PUBLIC ${BASALT_COMPILE_DEFINITIONS})
 
